@@ -1,5 +1,13 @@
-import { CsvParser } from "./CsvParse";
+import { CsvParser } from "./CsvParser";
 
 const csvParser = new CsvParser();
 
-csvParser.parseCsv("./bank-statements/natwest-statement.csv");
+async function getParsedCsvFile() {
+    const formattedCsv = await csvParser.parseCsv(
+        "./bank-statements/natwest-statement.csv"
+    );
+    console.log(formattedCsv);
+    formattedCsv.filter((line) => line.)
+}
+
+getParsedCsvFile();
