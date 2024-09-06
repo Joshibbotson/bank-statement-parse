@@ -1,13 +1,12 @@
 import fs from "fs";
 import readline from "readline";
-import { NatwestStatement } from "./types/NatwestStatement";
 
 export class CsvParser {
     private firstLine = true;
 
     public parseCsv(path: string): Promise<Record<string, string>[]> {
         return new Promise((resolve, reject) => {
-            let headers: NatwestStatement[] = [];
+            let headers: string[] = [];
             const formattedCsv: Record<string, string>[] = [];
             const readStream = fs.createReadStream(path);
             const rl = readline.createInterface({
@@ -17,26 +16,13 @@ export class CsvParser {
 
             rl.on("line", line => {
                 if (this.firstLine) {
-                    headers = this.splitLine(
-                        line
-                    ) as unknown as NatwestStatement[];
+                    headers = this.splitLine(line);
                     this.firstLine = false;
                 }
                 const splitLine = this.splitLine(line);
-                const keyedValue: Partial<NatwestStatement> = {};
+                const keyedValue: Record<string, string> = {};
                 for (let i = 0; i < headers.length; i++) {
-                    const header = headers[
-                        i
-                    ] as unknown as keyof NatwestStatement;
-                    const value = splitLine[i];
-
-                    if (header === "Date") {
-                        keyedValue[header] = new Date(value);
-                    } else if (header === "Value" || header === "Balance") {
-                        keyedValue[header] = parseFloat(value);
-                    } else {
-                        keyedValue[header] = value;
-                    }
+                    keyedValue[headers[i]] = splitLine[i];
                 }
                 formattedCsv.push(keyedValue);
             });
