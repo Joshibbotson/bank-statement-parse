@@ -1,12 +1,15 @@
-// factory class for statements
-
+import { AbstractStatement } from "./AbstractStatement";
 import { Statements } from "./enum/Statements.enum";
+import { NatwestStatement } from "./NatwestStatement";
 
+/**
+ * so this should
+ */
 class StatementFactory {
     constructor() {}
 
     getShoppingResults(
-        formattedCsvData: Record<PropertyKey, string>,
+        formattedCsvData: Record<PropertyKey, string>[],
         statementType: Statements
     ) {
         if (!formattedCsvData) {
@@ -16,11 +19,12 @@ class StatementFactory {
     }
 
     private factory(
-        formattedCsvData: Record<PropertyKey, string>,
+        formattedCsvData: Record<PropertyKey, string>[],
         statementType: Statements
     ) {
         switch (statementType) {
             case Statements.NATWEST:
+                return new NatwestStatement(formattedCsvData);
         }
     }
 }

@@ -20,6 +20,6 @@
     "homepage": "https://github.com/Joshibbotson/bank-statement-parse#readme",
     "dependencies": {
         "dayjs": "^1.11.13",
-        "express": "^4.19.2"
+        "express": "^4.21.0"
     }
 }
