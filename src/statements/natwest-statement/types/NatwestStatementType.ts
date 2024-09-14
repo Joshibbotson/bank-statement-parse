@@ -1,4 +1,4 @@
-export type NatwestStatement = {
+export type NatwestStatementCsv = {
     Date: Date;
     Type: string;
     Description: string;

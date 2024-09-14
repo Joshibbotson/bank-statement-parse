@@ -37,8 +37,6 @@ function getTargetMonthResults(
     month: number,
     csvResults: Record<string, string>[]
 ) {
-    const targetMonth = dayjs().set("month", month);
-
     return csvResults.filter(line => {
         const date = dayjs(line["Date"]);
         return month === date.get("month");

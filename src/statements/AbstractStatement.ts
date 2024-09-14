@@ -1,35 +1,32 @@
 import dayjs from "dayjs";
+import { CsvParser } from "../CsvParser";
 
-export class AbstractStatement {
-    constructor(private parsedCsv: Record<PropertyKey, string>[]) {}
-    // getShoppingResults(
-    //     csvResults: Record<string, string>[]
-    // ): Record<string, string>[] {
-    //     const targetShops = [
-    //         "tesco stores",
-    //         "morrisons",
-    //         "asda",
-    //         "sainsbury's",
-    //     ];
-    //     return csvResults.filter(line =>
-    //         targetShops.some(shop =>
-    //             line["Description"].toLowerCase().includes(shop)
-    //         )
-    //     );
-    // }
+export abstract class AbstractStatement<CsvType> {
+    private readonly csvParser: CsvParser = new CsvParser();
 
-    // getTargetMonthResults(month: number, csvResults: Record<string, string>[]) {
-    //     const targetMonth = dayjs().set("month", month);
+    /** Probs need to redo this method, it's pretty hard coded right now
+     * should accept a month and or in general a target set of strings
+     */
+    async getParsedCsvFile(path: string) {
+        const formattedCsv = await this.csvParser.parseCsv(path);
+        const filteredCsv = this.getShoppingResults();
+        const lastMonth = dayjs()
+            .set("month", dayjs().month() - 1)
+            .month();
+        const targetMonthResults = this.getTargetMonthResults(
+            lastMonth,
+            filteredCsv
+        );
 
-    //     return csvResults.filter(line => {
-    //         const date = dayjs(line["Date"]);
-    //         return month === date.get("month");
-    //     });
-    // }
+        const value = this.sumValues(targetMonthResults);
+        console.log("total spent:", `£${value}`);
+    }
+    abstract getShoppingResults(): CsvType[];
 
-    // sumValues(csvResults: Record<string, string>[]): number {
-    //     return csvResults.reduce((acc, curr) => {
-    //         return acc + Number(curr["Value"]);
-    //     }, 0);
-    // }
+    abstract getTargetMonthResults(
+        month: number,
+        csvData: CsvType[]
+    ): CsvType[];
+
+    abstract sumValues(csvData: CsvType[]): number;
 }

@@ -1,13 +1,7 @@
-import { AbstractStatement } from "./AbstractStatement";
 import { Statements } from "./enum/Statements.enum";
-import { NatwestStatement } from "./NatwestStatement";
+import { NatwestStatement } from "./natwest-statement/NatwestStatement";
 
-/**
- * so this should
- */
-class StatementFactory {
-    constructor() {}
-
+export class StatementFactory {
     getShoppingResults(
         formattedCsvData: Record<PropertyKey, string>[],
         statementType: Statements
@@ -15,7 +9,8 @@ class StatementFactory {
         if (!formattedCsvData) {
             throw new Error("no formatted data");
         }
-        const shoppingResults = this.factory(formattedCsvData, statementType);
+        const statement = this.factory(formattedCsvData, statementType);
+        return statement.getShoppingResults();
     }
 
     private factory(
